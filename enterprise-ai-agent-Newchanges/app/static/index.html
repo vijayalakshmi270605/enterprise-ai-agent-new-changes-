@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enterprise AI Assistant</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f3efe7;
+        --panel: #fffdf8;
+        --panel-strong: #ffffff;
+        --ink: #1f2328;
+        --muted: #6d6a63;
+        --line: #d9d2c6;
+        --accent: #0f766e;
+        --accent-strong: #0b5d57;
+        --accent-soft: #d9f1ee;
+        --user: #eaf4f3;
+        --assistant: #ffffff;
+        --danger: #b42318;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Georgia, serif;
+        background:
+          radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(180, 131, 56, 0.12), transparent 24%),
+          linear-gradient(135deg, #faf7f1 0%, #f4efe6 52%, #efe6da 100%);
+        color: var(--ink);
+      }
+
+      .shell {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-height: 100vh;
+        max-width: 1360px;
+        margin: 0 auto;
+        background: rgba(255, 253, 248, 0.72);
+        border-left: 1px solid rgba(217, 210, 198, 0.85);
+        border-right: 1px solid rgba(217, 210, 198, 0.85);
+        box-shadow: 0 18px 60px rgba(58, 46, 31, 0.12);
+        backdrop-filter: blur(10px);
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.45fr) minmax(320px, 0.96fr);
+        min-height: 0;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 800;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .status {
+        color: var(--muted);
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      main {
+        overflow-y: auto;
+        padding: 22px;
+      }
+
+      .chat-pane {
+        min-width: 0;
+        border-right: 1px solid var(--line);
+      }
+
+      .report-pane {
+        padding: 22px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(248, 243, 236, 0.95));
+      }
+
+      .sidebar {
+        padding: 22px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 242, 235, 0.9));
+      }
+
+      .sidebar-card {
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: 0 8px 22px rgba(62, 47, 30, 0.05);
+        margin-bottom: 14px;
+      }
+
+      .sidebar-title {
+        margin: 0 0 10px;
+        font-size: 15px;
+        letter-spacing: 0.02em;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        padding: 12px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #fff, #faf7f0);
+        border: 1px solid #ece4d8;
+      }
+
+      .metric-label {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .metric-value {
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .metric-note {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .bant-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .bant-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fcfbf7;
+        border: 1px solid #eee4d7;
+      }
+
+      .bant-name {
+        font-weight: 700;
+      }
+
+      .bant-value {
+        font-variant-numeric: tabular-nums;
+        color: var(--accent-strong);
+        font-weight: 700;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .recommendation {
+        color: var(--ink);
+        line-height: 1.45;
+      }
+
+      .report-summary {
+        margin: 10px 0 14px;
+        color: var(--ink);
+        line-height: 1.55;
+      }
+
+      .report-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .report-row {
+        display: grid;
+        gap: 4px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fcfbf7;
+        border: 1px solid #eee4d7;
+      }
+
+      .report-label {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .report-text {
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .download-actions {
+        display: grid;
+        gap: 10px;
+      }
+
+      .download-button {
+        width: 100%;
+      }
+
+      .messages {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .message {
+        display: flex;
+        gap: 10px;
+        max-width: 82%;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+      }
+
+      .avatar {
+        flex: 0 0 30px;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #edf0f5;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .bubble {
+        padding: 11px 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--assistant);
+        line-height: 1.45;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .user .bubble {
+        background: var(--user);
+        border-color: #c9e6dc;
+      }
+
+      .composer {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 10px;
+        padding: 16px 22px 20px;
+        border-top: 1px solid var(--line);
+        background: #fbfcfe;
+      }
+
+      .mic {
+        min-width: 48px;
+        width: 48px;
+        padding: 0;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--accent);
+        font-size: 19px;
+      }
+
+      .mic:hover {
+        background: #f0f6ff;
+      }
+
+      .mic.recording {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
+
+      .meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 48px;
+        max-height: 140px;
+        resize: vertical;
+        padding: 12px 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font: inherit;
+        line-height: 1.4;
+      }
+
+      textarea:focus {
+        outline: 2px solid rgba(26, 115, 232, 0.18);
+        border-color: var(--accent);
+      }
+
+      button {
+        align-self: end;
+        height: 48px;
+        min-width: 92px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--accent-strong);
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+
+      .error {
+        color: var(--danger);
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          border: 0;
+        }
+
+        .content {
+          grid-template-columns: 1fr;
+        }
+
+        header,
+        main,
+        .sidebar,
+        .composer {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .chat-pane {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .report-pane {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .message {
+          max-width: 96%;
+        }
+
+        .composer {
+          grid-template-columns: 1fr;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand">
+          <div class="mark">AI</div>
+          <div>
+            <h1>AI Assistant</h1>
+            <div class="status" id="status">360M model ready</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <aside class="report-pane">
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Lead Report</h2>
+            <div class="status-pill" data-report="report_status">Waiting for analysis</div>
+            <div class="report-summary" data-report="report_summary">Send a message to generate the BANT and metric report.</div>
+            <div class="summary-grid">
+              <div class="metric">
+                <span class="metric-label">Lead Score</span>
+                <div class="metric-value" data-report="report_lead_score">--</div>
+                <div class="metric-note" data-report="report_lead_category">Overall qualification</div>
+              </div>
+              <div class="metric">
+                <span class="metric-label">BANT Score</span>
+                <div class="metric-value" data-report="report_bant_score">--</div>
+                <div class="metric-note" data-report="report_conversion">Conversion confidence</div>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Sentiment</span>
+                <div class="metric-value" data-report="report_sentiment">--</div>
+                <div class="metric-note" data-report="report_tone">Tone blend</div>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Topic</span>
+                <div class="metric-value" data-report="report_topic">--</div>
+                <div class="metric-note">Product or need focus</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">BANT Report</h2>
+            <div class="report-list">
+              <div class="report-row">
+                <span class="report-label">Budget</span>
+                <div class="report-text" data-report="report_budget">--</div>
+                <div class="metric-note" data-report="report_budget_score">Budget qualification</div>
+              </div>
+              <div class="report-row">
+                <span class="report-label">Authority</span>
+                <div class="report-text" data-report="report_authority">--</div>
+                <div class="metric-note" data-report="report_authority_score">Decision-maker signal</div>
+              </div>
+              <div class="report-row">
+                <span class="report-label">Need</span>
+                <div class="report-text" data-report="report_need">--</div>
+                <div class="metric-note" data-report="report_need_score">Problem / use case signal</div>
+              </div>
+              <div class="report-row">
+                <span class="report-label">Timeline</span>
+                <div class="report-text" data-report="report_timeline">--</div>
+                <div class="metric-note" data-report="report_timeline_score">Urgency / buying window</div>
+              </div>
+            </div>
+            <div class="recommendation" data-report="report_recommendation" style="margin-top: 12px;">A BANT recommendation will appear here.</div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">MEDDIC Report</h2>
+            <div class="report-list">
+              <div class="report-row"><span class="report-label">Metrics</span><div class="report-text" data-report="report_meddic_metrics">--</div><div class="metric-note" data-report="report_meddic_metrics_score">Quantifiable economic value</div></div>
+              <div class="report-row"><span class="report-label">Economic Buyer</span><div class="report-text" data-report="report_meddic_economic_buyer">--</div><div class="metric-note" data-report="report_meddic_economic_buyer_score">Budget owner signal</div></div>
+              <div class="report-row"><span class="report-label">Decision Criteria</span><div class="report-text" data-report="report_meddic_decision_criteria">--</div><div class="metric-note" data-report="report_meddic_decision_criteria_score">Vendor-selection requirements</div></div>
+              <div class="report-row"><span class="report-label">Decision Process</span><div class="report-text" data-report="report_meddic_decision_process">--</div><div class="metric-note" data-report="report_meddic_decision_process_score">Approval follow-up</div></div>
+              <div class="report-row"><span class="report-label">Identify Pain</span><div class="report-text" data-report="report_meddic_identify_pain">--</div><div class="metric-note" data-report="report_meddic_identify_pain_score">Current lead problem</div></div>
+              <div class="report-row"><span class="report-label">Champion</span><div class="report-text" data-report="report_meddic_champion">--</div><div class="metric-note" data-report="report_meddic_champion_score">Internal advocate signal</div></div>
+            </div>
+            <div class="recommendation" data-report="report_meddic_recommendation" style="margin-top: 12px;">A focused MEDDIC follow-up will appear here.</div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Export</h2>
+            <div class="download-actions">
+              <button class="download-button" id="downloadReport" type="button">Download JSON report</button>
+              <div class="meta" data-report="report_export_note">The latest report is also kept in the browser session.</div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="chat-pane">
+          <main id="chat">
+            <div class="messages" id="messages">
+              <div class="message assistant">
+                <div class="avatar">AI</div>
+                <div class="bubble">Hi, I am ready. Ask me a question.</div>
+              </div>
+            </div>
+          </main>
+
+          <form class="composer" id="form">
+            <textarea id="prompt" placeholder="Type your message..." autocomplete="off"></textarea>
+            <button class="mic" id="mic" type="button" title="Speak">🎙</button>
+            <button id="send" type="submit">Send</button>
+          </form>
+        </section>
+
+        <aside class="sidebar">
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Lead Metrics</h2>
+            <div class="summary-grid">
+              <div class="metric"><span class="metric-label">Lead Score</span><div class="metric-value" data-metric="lead_score">--</div><div class="metric-note">Overall qualification score</div></div>
+              <div class="metric"><span class="metric-label">Category</span><div class="metric-value" data-metric="lead_category">--</div><div class="metric-note">Cold / warm / hot lead</div></div>
+              <div class="metric"><span class="metric-label">ICP</span><div class="metric-value" data-metric="icp_score">--</div><div class="metric-note">Ideal customer fit</div></div>
+              <div class="metric"><span class="metric-label">Intent</span><div class="metric-value" data-metric="intent_score">--</div><div class="metric-note">Buying intent strength</div></div>
+              <div class="metric"><span class="metric-label">Engagement</span><div class="metric-value" data-metric="engagement_score">--</div><div class="metric-note">Conversation activity</div></div>
+              <div class="metric"><span class="metric-label">Qualification</span><div class="metric-value" data-metric="qualification_score">--</div><div class="metric-note">Overall qualification</div></div>
+              <div class="metric"><span class="metric-label">Buying Signal</span><div class="metric-value" data-metric="buying_signal_score">--</div><div class="metric-note">Purchase urgency</div></div>
+              <div class="metric"><span class="metric-label">Relationship</span><div class="metric-value" data-metric="relationship_score">--</div><div class="metric-note">Trust / rapport</div></div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">BANT Scoring</h2>
+            <div class="status-pill" data-metric="bant_category">Needs Discovery</div>
+            <div class="metric" style="margin-bottom: 12px;">
+              <span class="metric-label">BANT Score</span>
+              <div class="metric-value" data-metric="bant_score">--</div>
+              <div class="metric-note">Budget, Authority, Need, Timeline</div>
+            </div>
+            <div class="bant-list">
+              <div class="bant-row"><span class="bant-name">Budget</span><span class="bant-value" data-metric="bant_budget">--</span></div>
+              <div class="bant-row"><span class="bant-name">Authority</span><span class="bant-value" data-metric="bant_authority">--</span></div>
+              <div class="bant-row"><span class="bant-name">Need</span><span class="bant-value" data-metric="bant_need">--</span></div>
+              <div class="bant-row"><span class="bant-name">Timeline</span><span class="bant-value" data-metric="bant_timeline">--</span></div>
+            </div>
+            <div class="recommendation" data-metric="bant_recommendation" style="margin-top: 12px;">Ask discovery questions to complete BANT.</div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">MEDDIC Scoring</h2>
+            <div class="status-pill" data-metric="meddic_category">Needs MEDDIC Discovery</div>
+            <div class="metric" style="margin-bottom: 12px;">
+              <span class="metric-label">MEDDIC Score</span>
+              <div class="metric-value" data-metric="meddic_score">--</div>
+              <div class="metric-note">Evidence-based deal qualification</div>
+            </div>
+            <div class="bant-list">
+              <div class="bant-row"><span class="bant-name">Metrics</span><span class="bant-value" data-metric="meddic_metrics">--</span></div>
+              <div class="bant-row"><span class="bant-name">Economic Buyer</span><span class="bant-value" data-metric="meddic_economic_buyer">--</span></div>
+              <div class="bant-row"><span class="bant-name">Decision Criteria</span><span class="bant-value" data-metric="meddic_decision_criteria">--</span></div>
+              <div class="bant-row"><span class="bant-name">Decision Process</span><span class="bant-value" data-metric="meddic_decision_process">--</span></div>
+              <div class="bant-row"><span class="bant-name">Identify Pain</span><span class="bant-value" data-metric="meddic_identify_pain">--</span></div>
+              <div class="bant-row"><span class="bant-name">Champion</span><span class="bant-value" data-metric="meddic_champion">--</span></div>
+            </div>
+            <div class="recommendation" data-metric="meddic_recommendation" style="margin-top: 12px;">A focused MEDDIC follow-up will appear here.</div>
+          </div>
+
+          <div class="sidebar-card">
+            <h2 class="sidebar-title">Next Action</h2>
+            <div class="recommendation" data-metric="recommendation">Continue nurturing the lead with helpful content.</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("form");
+      const promptInput = document.getElementById("prompt");
+      const messages = document.getElementById("messages");
+      const chat = document.getElementById("chat");
+      const send = document.getElementById("send");
+      const mic = document.getElementById("mic");
+      const status = document.getElementById("status");
+      const metricTargets = document.querySelectorAll("[data-metric]");
+      const reportTargets = document.querySelectorAll("[data-report]");
+      const downloadReportButton = document.getElementById("downloadReport");
+      const sessionId = `web-${Date.now()}`;
+      const history = [];
+      let audioContext = null;
+      let mediaStream = null;
+      let recorderNode = null;
+      let recordingChunks = [];
+      let recordingSampleRate = 16000;
+      let isRecording = false;
+      let voiceReplyRequested = false;
+      let recognition = null;
+      let latestReport = null;
+
+      mic.textContent = "Mic";
+
+      function formatMetricValue(value) {
+        if (value === null || value === undefined || value === "") return "--";
+        if (typeof value === "number") return Number.isInteger(value) ? value.toString() : value.toFixed(2);
+        return String(value);
+      }
+
+      function formatPercent(value) {
+        if (value === null || value === undefined || value === "") return "--";
+        const numericValue = Number(value);
+        if (Number.isNaN(numericValue)) return String(value);
+        return `${Math.round(numericValue)}%`;
+      }
+
+      function capitalize(value) {
+        if (!value) return "--";
+        return String(value).charAt(0).toUpperCase() + String(value).slice(1);
+      }
+
+      function updateSidebar(scoring) {
+        const data = scoring || {};
+        const bantScores = data.bant_scores || {};
+        const meddicScores = data.meddic_scores || {};
+        const mapping = {
+          lead_score: data.lead_score,
+          lead_category: data.lead_category,
+          icp_score: data.icp_score,
+          intent_score: data.intent_score,
+          engagement_score: data.engagement_score,
+          qualification_score: data.qualification_score,
+          buying_signal_score: data.buying_signal_score,
+          relationship_score: data.relationship_score,
+          bant_score: data.bant_score,
+          bant_category: data.bant_category,
+          bant_budget: bantScores.budget,
+          bant_authority: bantScores.authority,
+          bant_need: bantScores.need,
+          bant_timeline: bantScores.timeline,
+          bant_recommendation: data.bant_recommendation,
+          meddic_score: data.meddic_score,
+          meddic_category: data.meddic_category,
+          meddic_metrics: meddicScores.metrics,
+          meddic_economic_buyer: meddicScores.economic_buyer,
+          meddic_decision_criteria: meddicScores.decision_criteria,
+          meddic_decision_process: meddicScores.decision_process,
+          meddic_identify_pain: meddicScores.identify_pain,
+          meddic_champion: meddicScores.champion,
+          meddic_recommendation: data.meddic_recommendation,
+          recommendation: data.recommendation,
+        };
+
+        metricTargets.forEach((node) => {
+          const key = node.getAttribute("data-metric");
+          if (!(key in mapping)) return;
+          node.textContent = formatMetricValue(mapping[key]);
+          if (key === "bant_category" || key === "meddic_category") {
+            node.textContent = mapping[key] || "Needs Discovery";
+          }
+        });
+      }
+
+      function updateReport(scoring) {
+        const data = scoring || {};
+        const report = data.report || {};
+        const sentiment = report.sentiment || data.sentiment || {};
+        const textSentiment = sentiment.text || {};
+        const tone = sentiment.tone || {};
+        const bant = report.bant || {};
+        const meddic = report.meddic || {};
+        const mapping = {
+          report_status: report.status || data.bant_category || "Waiting for analysis",
+          report_summary: report.summary || "Send a message to generate the BANT and metric report.",
+          report_lead_score: report.lead_score ?? data.lead_score,
+          report_lead_category: report.lead_category ? `${report.lead_category}` : data.lead_category || "Overall qualification",
+          report_bant_score: report.bant_score ?? data.bant_score,
+          report_conversion: report.conversion_probability_percent !== undefined
+            ? `${formatMetricValue(report.conversion_probability_percent)}% conversion`
+            : data.conversion_probability_percent !== undefined
+              ? `${formatMetricValue(data.conversion_probability_percent)}% conversion`
+              : "Conversion confidence",
+          report_sentiment: textSentiment.sentiment
+            ? `${capitalize(textSentiment.sentiment)} (${formatPercent((textSentiment.confidence || 0) * 100)})`
+            : "Neutral",
+          report_tone: tone.label
+            ? `${tone.label}${tone.confidence !== undefined ? ` (${formatPercent((tone.confidence || 0) * 100)})` : ""}`
+            : "Tone blend",
+          report_topic: report.topic_focus || "general product discussion",
+          report_budget: bant.budget?.summary || report.budget || "Not stated yet",
+          report_budget_score: bant.budget?.score !== undefined ? `${formatMetricValue(bant.budget.score)}% signal` : "Budget qualification",
+          report_authority: bant.authority?.summary || report.authority_level || "Not stated yet",
+          report_authority_score: bant.authority?.score !== undefined ? `${formatMetricValue(bant.authority.score)}% signal` : "Decision-maker signal",
+          report_need: bant.need?.summary || report.need_summary || "Not stated yet",
+          report_need_score: bant.need?.score !== undefined ? `${formatMetricValue(bant.need.score)}% signal` : "Problem / use case signal",
+          report_timeline: bant.timeline?.summary || report.timeline_summary || "Not stated yet",
+          report_timeline_score: bant.timeline?.score !== undefined ? `${formatMetricValue(bant.timeline.score)}% signal` : "Urgency / buying window",
+          report_recommendation: report.recommendation || data.bant_recommendation || "A BANT recommendation will appear here.",
+          report_meddic_metrics: meddic.metrics?.summary || "Not stated yet",
+          report_meddic_metrics_score: meddic.metrics?.score !== undefined ? `${formatMetricValue(meddic.metrics.score)}% signal` : "Quantifiable economic value",
+          report_meddic_economic_buyer: meddic.economic_buyer?.summary || "Not stated yet",
+          report_meddic_economic_buyer_score: meddic.economic_buyer?.score !== undefined ? `${formatMetricValue(meddic.economic_buyer.score)}% signal` : "Budget owner signal",
+          report_meddic_decision_criteria: meddic.decision_criteria?.summary || "Not stated yet",
+          report_meddic_decision_criteria_score: meddic.decision_criteria?.score !== undefined ? `${formatMetricValue(meddic.decision_criteria.score)}% signal` : "Vendor-selection requirements",
+          report_meddic_decision_process: meddic.decision_process?.summary || "Not stated yet",
+          report_meddic_decision_process_score: meddic.decision_process?.score !== undefined ? `${formatMetricValue(meddic.decision_process.score)}% signal` : "Approval follow-up",
+          report_meddic_identify_pain: meddic.identify_pain?.summary || "Not stated yet",
+          report_meddic_identify_pain_score: meddic.identify_pain?.score !== undefined ? `${formatMetricValue(meddic.identify_pain.score)}% signal` : "Current lead problem",
+          report_meddic_champion: meddic.champion?.summary || "Not stated yet",
+          report_meddic_champion_score: meddic.champion?.score !== undefined ? `${formatMetricValue(meddic.champion.score)}% signal` : "Internal advocate signal",
+          report_meddic_recommendation: report.meddic_recommendation || data.meddic_recommendation || "A focused MEDDIC follow-up will appear here.",
+          report_export_note: "The latest report can be downloaded as JSON and is cached in this browser session.",
+        };
+
+        if (Object.keys(report).length > 0) {
+          latestReport = report;
+          try {
+            localStorage.setItem("lead_report_latest", JSON.stringify(report));
+          } catch (error) {
+            console.warn("Could not cache latest report", error);
+          }
+        }
+
+        reportTargets.forEach((node) => {
+          const key = node.getAttribute("data-report");
+          if (!(key in mapping)) return;
+          node.textContent = formatMetricValue(mapping[key]);
+        });
+      }
+
+      updateSidebar({});
+      updateReport({});
+
+      try {
+        const cachedReport = localStorage.getItem("lead_report_latest");
+        if (cachedReport) {
+          latestReport = JSON.parse(cachedReport);
+          updateReport({ report: latestReport });
+        }
+      } catch (error) {
+        console.warn("Could not restore cached report", error);
+      }
+
+      if (downloadReportButton) {
+        downloadReportButton.addEventListener("click", () => {
+          if (!latestReport) {
+            status.textContent = "Generate a report first";
+            return;
+          }
+          const exportPayload = {
+            ...latestReport,
+            exported_at: new Date().toISOString(),
+            session_id: sessionId,
+          };
+          const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `lead-report-${sessionId}.json`;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+      }
+
+      function addMessage(role, content, className = "") {
+        const row = document.createElement("div");
+        row.className = `message ${role}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = role === "user" ? "You" : "AI";
+
+        const bubble = document.createElement("div");
+        bubble.className = `bubble ${className}`;
+        bubble.textContent = content;
+
+        row.append(avatar, bubble);
+        messages.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+        return bubble;
+      }
+
+      function addMeta(bubble, text) {
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.textContent = text;
+        bubble.appendChild(meta);
+      }
+
+      function speak(text) {
+        if (!("speechSynthesis" in window) || !text) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 1.08;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      async function askAssistant(prompt, priorHistory) {
+        const responsePromise = fetch("/api/v1/infer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            session_id: sessionId,
+            prompt,
+            history: priorHistory,
+            tools: null,
+            use_rag: false,
+            stream: false
+          })
+        });
+
+        const scoringPromise = fetch("/api/v1/lead-scoring", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            session_id: sessionId,
+            text: prompt,
+            history: priorHistory,
+            metadata: { channel: "web_chat" }
+          })
+        });
+
+        const [responseResult, scoringResult] = await Promise.allSettled([responsePromise, scoringPromise]);
+
+        if (responseResult.status !== "fulfilled") {
+          throw responseResult.reason;
+        }
+
+        const response = responseResult.value;
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `Request failed: ${response.status}`);
+        }
+
+        let scoring = {};
+        if (scoringResult.status === "fulfilled") {
+          const scoringResponse = scoringResult.value;
+          if (scoringResponse.ok) {
+            scoring = await scoringResponse.json();
+          } else {
+            console.warn("Lead scoring failed", await scoringResponse.text());
+          }
+        } else {
+          console.warn("Lead scoring failed", scoringResult.reason);
+        }
+
+        return {
+          answer: await response.json(),
+          scoring,
+        };
+      }
+
+      async function sendVoice(blob) {
+        const formData = new FormData();
+        formData.append("file", blob, "microphone.wav");
+        formData.append("session_id", sessionId);
+        formData.append("use_rag", "false");
+        formData.append("tts", "false");
+
+        const response = await fetch("/api/v1/voice-chat", {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `Voice request failed: ${response.status}`);
+        }
+
+        return response.json();
+      }
+
+      function downsampleBuffer(buffer, inputSampleRate, outputSampleRate) {
+        if (outputSampleRate === inputSampleRate) return buffer;
+        const ratio = inputSampleRate / outputSampleRate;
+        const newLength = Math.round(buffer.length / ratio);
+        const result = new Float32Array(newLength);
+        let offsetResult = 0;
+        let offsetBuffer = 0;
+
+        while (offsetResult < result.length) {
+          const nextOffsetBuffer = Math.round((offsetResult + 1) * ratio);
+          let accumulator = 0;
+          let count = 0;
+          for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i += 1) {
+            accumulator += buffer[i];
+            count += 1;
+          }
+          result[offsetResult] = accumulator / Math.max(count, 1);
+          offsetResult += 1;
+          offsetBuffer = nextOffsetBuffer;
+        }
+        return result;
+      }
+
+      function encodeWav(samples, sampleRate) {
+        const bytesPerSample = 2;
+        const dataLength = samples.length * bytesPerSample;
+        const buffer = new ArrayBuffer(44 + dataLength);
+        const view = new DataView(buffer);
+
+        function writeString(offset, value) {
+          for (let i = 0; i < value.length; i += 1) {
+            view.setUint8(offset + i, value.charCodeAt(i));
+          }
+        }
+
+        writeString(0, "RIFF");
+        view.setUint32(4, 36 + dataLength, true);
+        writeString(8, "WAVE");
+        writeString(12, "fmt ");
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * bytesPerSample, true);
+        view.setUint16(32, bytesPerSample, true);
+        view.setUint16(34, 16, true);
+        writeString(36, "data");
+        view.setUint32(40, dataLength, true);
+
+        let offset = 44;
+        for (let i = 0; i < samples.length; i += 1, offset += 2) {
+          const sample = Math.max(-1, Math.min(1, samples[i]));
+          view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
+        }
+
+        return new Blob([view], { type: "audio/wav" });
+      }
+
+      function mergeChunks(chunks) {
+        const length = chunks.reduce((total, chunk) => total + chunk.length, 0);
+        const merged = new Float32Array(length);
+        let offset = 0;
+        for (const chunk of chunks) {
+          merged.set(chunk, offset);
+          offset += chunk.length;
+        }
+        return merged;
+      }
+
+      async function startRecording() {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 1,
+            noiseSuppression: true,
+            echoCancellation: true,
+            autoGainControl: true
+          }
+        });
+        audioContext = new AudioContext();
+        recordingSampleRate = audioContext.sampleRate;
+        recordingChunks = [];
+        const source = audioContext.createMediaStreamSource(mediaStream);
+        recorderNode = audioContext.createScriptProcessor(4096, 1, 1);
+        recorderNode.onaudioprocess = (event) => {
+          recordingChunks.push(new Float32Array(event.inputBuffer.getChannelData(0)));
+        };
+        source.connect(recorderNode);
+        recorderNode.connect(audioContext.destination);
+        isRecording = true;
+        mic.classList.add("recording");
+        mic.textContent = "Stop";
+        status.textContent = "Listening. Click Stop when done.";
+      }
+
+      async function stopRecording() {
+        isRecording = false;
+        mic.classList.remove("recording");
+        mic.textContent = "Mic";
+        status.textContent = "Processing voice";
+
+        if (recorderNode) recorderNode.disconnect();
+        if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
+        if (audioContext) await audioContext.close();
+
+        const merged = mergeChunks(recordingChunks);
+        const downsampled = downsampleBuffer(merged, recordingSampleRate, 16000);
+        return encodeWav(downsampled, 16000);
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const prompt = promptInput.value.trim();
+        if (!prompt) return;
+
+        addMessage("user", prompt);
+        const priorHistory = history.slice();
+        history.push({ role: "user", content: prompt });
+        promptInput.value = "";
+        promptInput.focus();
+
+        const thinking = addMessage("assistant", "Thinking...");
+        send.disabled = true;
+        status.textContent = "Thinking";
+
+        try {
+          const data = await askAssistant(prompt, priorHistory);
+          thinking.textContent = data.answer.response || "";
+          history.push({ role: "assistant", content: thinking.textContent });
+          updateSidebar(data.scoring);
+          updateReport(data.scoring);
+          if (voiceReplyRequested) speak(thinking.textContent);
+          status.textContent = "Ready";
+        } catch (error) {
+          thinking.textContent = "Could not get an answer. Check the server logs.";
+          thinking.classList.add("error");
+          status.textContent = "Error";
+          console.error(error);
+        } finally {
+          voiceReplyRequested = false;
+          send.disabled = false;
+          chat.scrollTop = chat.scrollHeight;
+        }
+      });
+
+      promptInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
+      });
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        mic.disabled = true;
+        mic.title = "Fast voice mode needs Chrome or Edge Speech Recognition";
+      } else {
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-IN";
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+      }
+
+      mic.addEventListener("click", () => {
+        if (!recognition) return;
+        try {
+          if (isRecording) {
+            recognition.stop();
+            return;
+          }
+
+          voiceReplyRequested = true;
+          recognition.start();
+        } catch (error) {
+          addMessage("assistant", "Could not start fast voice recognition. Allow microphone permission and use Chrome or Edge.", "error");
+          status.textContent = "Error";
+          console.error(error);
+          isRecording = false;
+          mic.classList.remove("recording");
+          mic.textContent = "Mic";
+        }
+      });
+
+      if (recognition) {
+        recognition.addEventListener("start", () => {
+          isRecording = true;
+          mic.classList.add("recording");
+          mic.textContent = "Stop";
+          status.textContent = "Listening";
+          promptInput.value = "";
+        });
+
+        recognition.addEventListener("result", (event) => {
+          let transcript = "";
+          for (let i = event.resultIndex; i < event.results.length; i += 1) {
+            transcript += event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              promptInput.value = transcript.trim();
+              status.textContent = "Heard: " + promptInput.value;
+              if (promptInput.value) form.requestSubmit();
+            } else {
+              promptInput.value = transcript.trim();
+            }
+          }
+        });
+
+        recognition.addEventListener("end", () => {
+          isRecording = false;
+          mic.classList.remove("recording");
+          mic.textContent = "Mic";
+          if (!send.disabled && status.textContent === "Listening") status.textContent = "Ready";
+        });
+
+        recognition.addEventListener("error", (event) => {
+          isRecording = false;
+          mic.classList.remove("recording");
+          mic.textContent = "Mic";
+          status.textContent = "Error";
+          addMessage("assistant", `Voice recognition error: ${event.error}. Use Chrome/Edge and allow microphone permission.`, "error");
+          voiceReplyRequested = false;
+        });
+      }
+    </script>
+  </body>
+</html>

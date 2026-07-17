@@ -1,0 +1,12 @@
+[
+  {
+    "instruction": "Summarize the following meeting notes into key action items.",
+    "input": "We reviewed Q2 sales performance, identified gaps in customer onboarding, and prioritized product roadmap updates.",
+    "output": "- Review Q2 sales performance metrics\n- Improve customer onboarding process\n- Prioritize product roadmap updates"
+  },
+  {
+    "instruction": "Write a professional email response to a client asking for deployment timeline details.",
+    "input": "The client is concerned about launch dates and resource allocation.",
+    "output": "Dear [Client],\n\nThank you for your message. We expect to complete the deployment readiness review by next Tuesday and begin phased rollout the following week. We will send you a detailed timeline and resource plan by the end of the day tomorrow.\n\nBest regards,\n[Your Name]"
+  }
+]

@@ -1,0 +1,33 @@
+services:
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
+  assistant:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    ports:
+      - "8000:8000"
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      LORA_OUTPUT_DIR: /workspace/models/lora
+      CHROMA_PERSIST_DIR: /workspace/chroma_store
+    depends_on:
+      - redis
+    volumes:
+      - model-data:/workspace/models
+      - chroma-data:/workspace/chroma_store
+      - output-data:/workspace/outputs
+
+volumes:
+  redis-data:
+  model-data:
+  chroma-data:
+  output-data:

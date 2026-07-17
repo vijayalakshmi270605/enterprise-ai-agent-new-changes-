@@ -1,0 +1,625 @@
+Below is a professional, report-ready version of the project details based on the proposal. It is rewritten in a format suitable for inclusion in your project documentation rather than copied page by page.
+
+---
+
+# Follei – Autonomous Business Workforce Platform
+
+## Project Overview
+
+Follei is an AI-powered Autonomous Business Workforce Platform designed to function as a digital workforce for organizations. Instead of simply automating repetitive tasks, the platform understands business operations, learns organizational knowledge, and autonomously performs customer-facing and revenue-generating activities.
+
+The system integrates with existing business applications, analyzes organizational data, and deploys specialized AI workers capable of handling sales, customer support, collections, customer success, renewals, and operational workflows.
+
+Unlike traditional CRM systems, workflow automation tools, or AI chatbots that execute predefined tasks, Follei makes intelligent decisions based on business context, customer interactions, and continuous learning.
+
+---
+
+# Objective
+
+The primary objective of Follei is to create a unified AI workforce capable of learning an organization's products, services, business processes, policies, customer information, and operational knowledge, enabling AI agents to perform business activities independently while continuously improving through experience.
+
+---
+
+# Problem Statement
+
+Modern organizations rely on multiple disconnected business systems such as:
+
+* Customer Relationship Management (CRM)
+* Email Platforms
+* WhatsApp Business
+* Telephone Systems
+* Enterprise Resource Planning (ERP)
+* Learning Management Systems (LMS)
+* Ticketing Platforms
+* Knowledge Bases
+* Spreadsheets
+* Internal Documentation
+
+Employees spend considerable time performing repetitive tasks including:
+
+* Lead follow-ups
+* Answering customer queries
+* Scheduling meetings
+* Sending reminders
+* Customer onboarding
+* Payment collection
+* Support ticket handling
+
+Existing AI solutions generally solve only individual problems such as chatbots, AI sales assistants, or workflow automation. However, there is no unified platform capable of acting as an autonomous business workforce.
+
+Follei addresses this challenge by combining business intelligence, knowledge management, customer intelligence, revenue prediction, AI agents, and continuous learning into one integrated platform.
+
+---
+
+# Product Vision
+
+The platform follows a simple vision:
+
+1. Connect business data.
+2. Learn business knowledge.
+3. Deploy AI workers.
+4. Continuously improve through customer interactions.
+
+The goal is to enable organizations to connect their business assets once and immediately deploy AI employees capable of working continuously without manual intervention.
+
+---
+
+# Core Platform Philosophy
+
+Traditional Business Workflow:
+
+Data → Human Decision → Action
+
+Follei Workflow:
+
+Data → Understanding → Decision → Action → Learning
+
+Instead of automating predefined workflows, Follei understands business context, makes intelligent decisions, performs actions, and improves itself after every interaction.
+
+---
+
+# High-Level System Architecture
+
+The platform consists of six major intelligent systems:
+
+1. Business Intelligence System
+2. Knowledge System
+3. Revenue Intelligence System
+4. Customer Intelligence System
+5. AI Workforce System
+6. Learning System
+
+Together, these systems enable autonomous business operations.
+
+---
+
+# System 1: Business Intelligence System
+
+## Purpose
+
+The Business Intelligence System serves as the foundation of the platform. Before AI workers can interact with customers, they must first understand the organization's products, services, processes, and policies.
+
+## Connected Data Sources
+
+### Knowledge Sources
+
+* Company Website
+* Product Catalogs
+* Brochures
+* PDFs
+* SOP Documents
+* Sales Decks
+* Pricing Sheets
+
+### Internal Sources
+
+* Google Drive
+* Microsoft OneDrive
+* SharePoint
+* Notion
+* Confluence
+
+### Communication Sources
+
+* Gmail
+* Outlook
+* WhatsApp
+* Microsoft Teams
+* Slack
+
+### Business Systems
+
+* CRM
+* ERP
+* LMS
+* Accounting Software
+* Ticketing Platforms
+
+## AI Processing
+
+The platform extracts organizational knowledge including:
+
+* Products
+* Services
+* Pricing
+* Plans
+* Policies
+* FAQs
+* Competitor Information
+* Customer Segments
+* Sales Processes
+* Support Processes
+* Payment Processes
+
+## Output
+
+The extracted information is organized into a Business Knowledge Graph, which acts as the organization's digital brain.
+
+---
+
+# System 2: Knowledge System
+
+## Purpose
+
+The Knowledge System provides accurate business context to every AI worker.
+
+It consists of four knowledge layers.
+
+### Layer 1 – Structured Knowledge Store
+
+Stores structured business information such as:
+
+* Products
+* Services
+* Pricing
+* Policies
+* Plans
+* Service Level Agreements (SLAs)
+
+### Layer 2 – Vector Database
+
+Stores unstructured documents including:
+
+* PDFs
+* Emails
+* Knowledge Articles
+* Call Transcripts
+* Internal Documents
+
+This layer enables semantic search using vector embeddings.
+
+### Layer 3 – Business Knowledge Graph
+
+Represents relationships between business entities.
+
+Example relationships include:
+
+* Product → Feature
+* Feature → Benefit
+* Benefit → Customer Segment
+* Customer Segment → Objections
+* Objection → Response
+
+### Layer 4 – Memory System
+
+Maintains different levels of memory:
+
+* Long-Term Memory (Company Knowledge)
+* Mid-Term Memory (Customer History)
+* Short-Term Memory (Current Conversation Context)
+
+---
+
+# System 3: Revenue Intelligence System
+
+## Purpose
+
+The Revenue Intelligence System predicts customer purchase probability and prioritizes leads.
+
+### Lead Intelligence Engine
+
+Calculates multiple business scores including:
+
+* ICP Score
+* Intent Score
+* Engagement Score
+* Qualification Score
+* Buying Signal Score
+* Relationship Score
+
+### Qualification Framework Engine
+
+Supports industry-standard qualification frameworks including:
+
+* BANT
+* MEDDIC
+* SPIN
+* CHAMP
+* ANUM
+
+Organizations can also create custom qualification frameworks.
+
+### Revenue Probability Engine
+
+Predicts the likelihood of customer conversion using:
+
+* Historical Sales Data
+* Behavioral Analytics
+* Intent Signals
+* Qualification Information
+
+The system generates a Revenue Probability Score ranging from 0 to 100.
+
+---
+
+# System 4: Customer Intelligence System
+
+## Purpose
+
+The Customer Intelligence System manages customers after successful conversion.
+
+### Customer Health Engine
+
+Measures:
+
+* Product Adoption
+* Feature Usage
+* Customer Engagement
+* Customer Satisfaction
+
+### Churn Prediction Engine
+
+Detects:
+
+* Declining Product Usage
+* Support Escalations
+* Payment Delays
+* Negative Customer Sentiment
+
+Outputs a Churn Risk Score.
+
+### Expansion Engine
+
+Identifies opportunities for:
+
+* Upselling
+* Cross-selling
+* Renewals
+
+Produces an Expansion Probability Score.
+
+---
+
+# System 5: AI Workforce System
+
+The AI Workforce System is the execution layer where specialized AI workers perform business operations.
+
+## SDR Worker
+
+Responsibilities:
+
+* Lead Qualification
+* Lead Nurturing
+* Discovery Conversations
+* Meeting Scheduling
+
+Communication Channels:
+
+* Voice
+* Email
+* WhatsApp
+
+---
+
+## Sales Executive Worker
+
+Responsibilities:
+
+* Product Demonstrations
+* Objection Handling
+* Proposal Generation
+* Deal Progression
+
+---
+
+## Customer Success Worker
+
+Responsibilities:
+
+* Customer Onboarding
+* Product Adoption
+* Customer Engagement
+* Renewal Preparation
+
+---
+
+## Support Worker
+
+Responsibilities:
+
+* Customer Support
+* FAQ Responses
+* Ticket Resolution
+* Escalation Management
+
+---
+
+## Collections Worker
+
+Responsibilities:
+
+* Payment Reminders
+* Invoice Follow-up
+* Collection Calls
+* Renewal Notifications
+
+---
+
+## Account Manager Worker
+
+Responsibilities:
+
+* Customer Relationship Management
+* Expansion Opportunities
+* Executive Communication
+
+---
+
+## Executive Insights Worker
+
+Provides business insights including:
+
+* Revenue Forecasts
+* Performance Analysis
+* Opportunity Tracking
+* Business Recommendations
+
+Example:
+
+Revenue forecast reduced by 12%.
+
+Reason:
+Increase in stalled opportunities.
+
+Recommendation:
+Executive intervention required.
+
+---
+
+# System 6: Learning System
+
+## Purpose
+
+The Learning System continuously improves platform performance.
+
+Learning Cycle:
+
+Action
+
+↓
+
+Customer Response
+
+↓
+
+Outcome
+
+↓
+
+Performance Evaluation
+
+↓
+
+Model Improvement
+
+Examples include:
+
+* Calls leading to successful meetings
+* Proposals resulting in closed deals
+* Support tickets resulting in escalations
+
+Every interaction contributes to future learning and better decision-making.
+
+---
+
+# Communication Layer
+
+The platform communicates with customers through multiple channels including:
+
+## Voice
+
+* Inbound Calls
+* Outbound Calls
+* AI Receptionist
+
+## WhatsApp
+
+* Text Messages
+* Voice Notes
+* Documents
+* Media
+
+## Email
+
+* Outbound Campaigns
+* Automated Responses
+* Personalized Follow-ups
+
+## SMS
+
+* Reminders
+* Alerts
+* Notifications
+
+## Website Chat
+
+* Lead Capture
+* Customer Support
+* Lead Qualification
+
+---
+
+# Artificial Intelligence Components
+
+The platform utilizes multiple AI technologies.
+
+## NLP Models
+
+* Intent Detection
+* Sentiment Analysis
+* Topic Classification
+* Objection Detection
+* Entity Recognition
+
+## Speech Models
+
+* Speech-to-Text
+* Text-to-Speech
+* Voice Cloning
+* Emotion Detection
+
+## Machine Learning Models
+
+* Lead Scoring
+* Conversion Prediction
+* Deal Risk Prediction
+* Churn Prediction
+* Upsell Prediction
+* Payment Risk Prediction
+* Revenue Forecasting
+
+## Agentic AI
+
+The system supports:
+
+* Multi-Agent Orchestration
+* Intelligent Planning
+* Autonomous Task Execution
+* Reasoning
+* Tool Integration
+* Memory Management
+
+---
+
+# Analytics Layer
+
+The Analytics Layer provides business insights across multiple areas.
+
+## Revenue Analytics
+
+* Pipeline Value
+* Forecast Revenue
+* Sales Velocity
+* Win Rate
+* AI-Generated Revenue
+
+## Customer Analytics
+
+* Customer Health
+* Customer Retention
+* Renewal Rate
+* Churn Rate
+
+## Operations Analytics
+
+* Response Time
+* Resolution Time
+* Agent Utilization
+* Automation Rate
+
+---
+
+# Industry Adaptation Framework
+
+Follei is designed as a configurable platform rather than being restricted to a single industry.
+
+Industry-specific packs include:
+
+### Education
+
+* Admissions
+* Student Counselling
+* Fee Collection
+* Student Success
+
+### Healthcare
+
+* Appointment Scheduling
+* Patient Follow-up
+* Care Plans
+* Billing
+
+### Real Estate
+
+* Property Discovery
+* Site Visits
+* Booking Follow-up
+* Documentation
+
+### Manufacturing
+
+* Procurement
+* Vendor Management
+* Compliance
+
+---
+
+# Technology Stack
+
+### Frontend
+
+* React
+* Next.js
+
+### Backend
+
+* Python
+* FastAPI
+
+### Workflow Engine
+
+* Temporal
+
+### Databases
+
+* PostgreSQL
+* ClickHouse
+* Redis
+* Qdrant (Vector Database)
+
+### Object Storage
+
+* S3 Compatible Storage
+
+### AI Models
+
+* OpenAI Models
+* Claude Models
+* Open-Source Large Language Models
+
+### Machine Learning Frameworks
+
+* PyTorch
+* XGBoost
+* LightGBM
+
+### Communication Services
+
+* Twilio
+* WhatsApp Business API
+* SendGrid
+
+---
+
+# Key Metric
+
+The platform measures its business impact using the **Revenue Influence Score**, which represents the total revenue directly influenced by Follei through:
+
+* Sales
+* Customer Support
+* Renewals
+* Collections
+* Upselling
+
+---
+

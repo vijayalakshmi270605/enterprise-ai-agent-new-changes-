@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  assistant:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - REDIS_URL=redis://redis:6379/0
+      - MODEL_BASE=${MODEL_BASE}
+      - LORA_OUTPUT_DIR=/workspace/models/lora
+      - CHROMA_PERSIST_DIR=/workspace/chroma_store
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL}
+      - ENABLE_STREAMING=true
+    depends_on:
+      - redis
+    volumes:
+      - ..:/workspace
+
+volumes:
+  redis-data:
